@@ -1,5 +1,5 @@
 import Config as c
-import ConectionFactory as bd
+import ConnectionFactory as bd
 import pandas as pd
 
 entrada = c.natureza

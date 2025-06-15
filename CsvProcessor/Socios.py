@@ -1,4 +1,4 @@
-import ConectionFactory as bd
+import ConnectionFactory as bd
 import pandas as pd
 import Config as c
 

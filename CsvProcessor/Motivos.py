@@ -1,7 +1,7 @@
-import ConectionFactory
+import ConnectionFactory
 import pandas as pd
 import Config as c
-import ConectionFactory as bd
+import ConnectionFactory as bd
 
 entrada = c.motivos
 

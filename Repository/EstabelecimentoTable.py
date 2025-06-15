@@ -1,5 +1,5 @@
 import Config as c
-import ConectionFactory as bd
+import ConnectionFactory as bd
 
 class Estabelecimentos(bd):
     colunas = [
@@ -51,7 +51,7 @@ class Estabelecimentos(bd):
         )
         self.con.execute(sql)
 
-    def incert(self, data):
+    def insert(self, data):
         placeholders = ', '.join(['?'] * len(self.colunas))
         sql = f"INSERT INTO Estabelecimentos ({', '.join(self.colunas)}) VALUES ({placeholders})"
         self.con.cursor().executemany(sql, data)

@@ -1,6 +1,6 @@
 import pandas as pd
 import Config as c
-import ConectionFactory as bd
+import ConnectionFactory as bd
 import Repository.EmpresasTable as Empresa
 
 entrada = c.empresas
@@ -69,7 +69,7 @@ for _, row in chunk.iterrows():
     data.append(tuple(row_data))
 
 try:
-    Table.incert(data)
+    Table.insert(data)
     print(f"Chunk inserido com sucesso: {len(data)} registros")
 except Exception as e:
     print(f"Erro ao inserrir chunk {e}")

@@ -4,7 +4,8 @@ driver = "{ODBC Driver 17 for SQL Server}"
 Server = "LEONARDO_KUSMA"
 Database = "Cnpj_Jornada"
 UID = "LeonardoKusma"
-PWD = "123123"
+PWD = "Armario2003@"
+
 
 #----------------------------- PATHS ARQUIVOS
 

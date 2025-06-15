@@ -1,5 +1,5 @@
 import pandas as pd
-import ConectionFactory as bd
+import ConnectionFactory as bd
 import Config as c
 #https://www.youtube.com/watch?v=vYVVjJvy2Os&list=RDGMEM2VCIgaiSqOfVzBAjPJm-ag&index=9
 

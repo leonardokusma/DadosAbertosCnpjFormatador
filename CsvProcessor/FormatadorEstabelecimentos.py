@@ -1,7 +1,7 @@
 import re
 import pandas as pd
 import pyodbc as db
-import ConectionFactory as c
+import ConnectionFactory as c
 
 
 def limpar_linha(line):

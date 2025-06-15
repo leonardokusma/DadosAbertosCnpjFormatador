@@ -1,4 +1,4 @@
-import ConectionFactory as bd
+import ConnectionFactory as bd
 
 
 class MotivosTable:
