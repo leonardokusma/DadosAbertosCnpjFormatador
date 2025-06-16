@@ -1,7 +1,7 @@
 import Config as c
 import ConnectionFactory as bd
 
-class Empresas(bd):
+class Empresas():
     colunas = [
         "Cnpj_Basico",
         "Razao_Social",

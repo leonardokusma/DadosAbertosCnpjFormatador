@@ -1,7 +1,7 @@
 import Config as c
 import ConnectionFactory as bd
 
-class Estabelecimentos(bd):
+class Estabelecimentos():
     colunas = [
         'cnpj_basico', 'cnpj_ordem', 'cnpj_dv', 'identificador_matriz_filial', 'nome_fantasia',
         'situacao_cadastral', 'data_situacao_cadastral', 'motivo_situacao_cadastral', 'nome_cidade_exterior',

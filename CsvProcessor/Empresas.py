@@ -51,7 +51,7 @@ with (open(entrada, 'r', encoding="latin1") as arquivo):
                 row_data = [None if pd.isna(val) else val for val in row]
                 data.append(tuple(row_data))
             try:
-                Table.incert(data)
+                Table.insert(data)
                 print(f"Chunk inserido com sucesso: {len(data)} registros")
             except Exception as e:
                 print(f"Erro ao inserrir chunk {e}")

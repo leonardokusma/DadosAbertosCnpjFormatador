@@ -2,8 +2,10 @@ import re
 import pandas as pd
 import pyodbc as db
 import ConnectionFactory as c
+import Repository.EstabelecimentoTable as Estabelecimentos
 
 
+Estabele = Estabelecimentos.Estabelecimentos()
 def limpar_linha(line):
     # Remove aspas duplas e mantém o restante
     line = line.strip()
@@ -74,16 +76,12 @@ colunas = [
     'ddd_fax', 'fax', 'correio_eletronico', 'situacao_especial', 'data_situacao_especial'
 ]
 
-
 colunas_numericas = ['cnpj_basico', 'cnpj_ordem', 'cnpj_dv', 'ddd_1', 'telefone_1', 'ddd_2', 'telefone_2', 'ddd_fax',
                      'fax', 'cep']
-
-
-
 # Conexão com o banco de dados
 connection = c.ConectionFactory()
 con = connection.getConnection()
-cursor = con.cursor()
+
 
 chunk_size = 1000
 buffer = []
@@ -132,12 +130,8 @@ with open(entrada, 'r', encoding='latin1') as arquivo:
                 row_data = [None if pd.isna(val) else val for val in row]
                 data.append(tuple(row_data))
 
-            placeholders = ', '.join(['?'] * len(colunas))
-            sql = f"INSERT INTO Estabelecimentos ({', '.join(colunas)}) VALUES ({placeholders})"
-
             try:
-                cursor.executemany(sql, data)
-                con.commit()
+                Estabele.insert(data)
                 print(f"Chunk inserido com sucesso: {len(data)} registros")
             except Exception as e:
                 print(f"Erro ao inserir chunk: {e}")
@@ -148,6 +142,42 @@ with open(entrada, 'r', encoding='latin1') as arquivo:
 if buffer:
     chunk = pd.DataFrame(buffer, columns=colunas)
 
-cursor.close()
+    # Substitui strings vazias e espaços por None
+    chunk = chunk.replace(r'^\s*$', None, regex=True)
+
+    # Converte datas
+    for col in ['data_situacao_cadastral', 'data_inicio_atividade', 'data_situacao_especial']:
+        if col in chunk.columns:
+            chunk[col] = pd.to_datetime(chunk[col], format='%Y%m%d', errors='coerce')
+            chunk[col] = chunk[col].dt.strftime('%Y-%m-%d')
+            chunk[col] = chunk[col].replace('NaT', None)
+
+    # Tratamento melhorado para colunas numéricas
+    for col in colunas_numericas:
+        if col in chunk.columns:
+            # Remove espaços em branco e converte strings vazias para None
+            chunk[col] = chunk[col].astype(str).str.strip()
+            chunk[col] = chunk[col].replace(['', 'nan', 'None'], None)
+
+            # Converte para numérico
+            chunk[col] = pd.to_numeric(chunk[col], errors='coerce')
+
+            # Substitui NaN por 0 (ou mantenha None se preferir NULL no banco)
+            chunk[col] = chunk[col].fillna(0).astype('Int64')  # Usa Int64 para permitir NaN
+
+    data = []
+    for _, row in chunk.iterrows():
+        row_data = [None if pd.isna(val) else val for val in row]
+        data.append(tuple(row_data))
+
+    try:
+        Estabele.insert(data)
+        print(f"Chunk inserido com sucesso: {len(data)} registros")
+    except Exception as e:
+        print(f"Erro ao inserir chunk: {e}")
+        con.rollback()
+
+    buffer = []
+
 con.close()
 print("Processamento concluído!")

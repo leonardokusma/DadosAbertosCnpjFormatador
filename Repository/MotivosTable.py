@@ -10,7 +10,7 @@ class MotivosTable:
     def Create(self):
 
         sql = (f"CREATE TABLE IF NOT EXIST Motivos("
-               f"Codigo INT NULL,"
+               f"id INT NULL,"
                f"Descricao VARCHAR(600) NULL"
                f")")
 
@@ -22,7 +22,7 @@ class MotivosTable:
 
     def insert(self,data):
 
-        sql = f"INSERT INTO Motivos (Codigo, Descricao) VALUES (??)"
+        sql = f"INSERT INTO Motivos (id, Descricao) VALUES (?,?)"
         try:
             self.con.GetCursor().executemany(sql,data)
             self.con.commit()
